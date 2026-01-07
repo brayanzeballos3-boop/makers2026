@@ -352,7 +352,7 @@ const firebaseConfig = {
 
         relayRef.on("value", (snapshot) => {
           const state = snapshot.val();
-          statusText.innerText = state ? "ON" : "OFF";
+          statusText.innerText = state ? "🔥HUMO DETECTADO" : "NO HUMO";
           toggleButton.style.backgroundColor = state ? "green" : "blue";
         });
 
@@ -386,4 +386,5 @@ const firebaseConfig = {
 </body>
 
 </html>
+
 
