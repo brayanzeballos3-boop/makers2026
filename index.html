@@ -46,7 +46,7 @@
       background-color: blue;
       cursor: pointer;
       font-size: 16px;
-      width: 90%;
+	  width: 90%;
       transition: opacity 0.3s ease;
     }
     .relay-card button:hover {
@@ -125,6 +125,7 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+    /* Smaller devices */
     @media (max-width: 700px) {
       .relay-card {
         width: 90%;
@@ -145,9 +146,10 @@
 </head>
 <body>
 
+ 
   <!-- Login form -->
   <div id="loginForm">
-     <h1>SENSOR DE HUMO</h1>
+       <h1>SENSOR DE HUMO</h1>
      <h1>LOGIN</h1>
     <input type="email" id="email" placeholder="Enter Email" required />
     <input type="password" id="password" placeholder="Enter Password" required />
@@ -155,6 +157,7 @@
   </div>
 
   <!-- Dashboard -->
+   
   <div id="dashboard">
     <h1>PANEL DE CONTROL - SENSOR DE HUMO</h1>
     <div class="relay-container">
@@ -163,11 +166,113 @@
         <p>Estado: <span id="status1">Loading...</span></p>
         <button id="btn1">RESETEAR</button>
       </div>
-      <!-- Repite para las demás áreas -->
+
+  <div class="relay-card">
+        <h2>AREA - ADMINISTRACION</h2>
+        <p>Estado: <span id="status2">Loading...</span></p>
+        <button id="btn2">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - SALA DE REUNIONES</h2>
+        <p>Estado: <span id="status3">Loading...</span></p>
+        <button id="btn3">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - ADMINISTRACION 2</h2>
+        <p>Estado: <span id="status4">Loading...</span></p>
+        <button id="btn4">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - DESORILLADORA</h2>
+        <p>Estado: <span id="status5">Loading...</span></p>
+        <button id="btn5">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - CARPINTERIA</h2>
+        <p>Status: <span id="status6">Loading...</span></p>
+        <button id="btn6">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - GUITARRA 1</h2>
+        <p>Status: <span id="status7">Loading...</span></p>
+        <button id="btn7">RESETEAR</button>
+      </div>
+
+       <div class="relay-card">
+        <h2>AREA - GUITARRA 2</h2>
+        <p>Estado: <span id="status8">Loading...</span></p>
+        <button id="btn8">RESETEAR</button>
+      </div>
+
+       <div class="relay-card">
+        <h2>AREA - GUITARRA 3 </h2>
+        <p>Estado: <span id="status9">Loading...</span></p>
+        <button id="btn9">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>AREA - GUITARRA 4</h2>
+        <p>Estado: <span id="status10">Loading...</span></p>
+        <button id="btn10">RESETEAR</button>
+      </div>
+      <div class="relay-card">
+
+        <h2>AREA - GUITARRA 5</h2>
+        <p>Estado: <span id="status11">Loading...</span></p>
+        <button id="btn11">RESETEAR</button>
+      </div>
+      
+      <div class="relay-card">
+        <h2>AREA - CARPINTERIA</h2>
+        <p>Estado: <span id="status12">Loading...</span></p>
+        <button id="btn12">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>10</h2>
+        <p>Estado: <span id="status13">Loading...</span></p>
+        <button id="btn13">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>11</h2>
+        <p>Estado: <span id="status14">Loading...</span></p>
+        <button id="btn14">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>12</h2>
+        <p>Estado: <span id="status15">Loading...</span></p>
+        <button id="btn15">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>13</h2>
+        <p>Estado: <span id="status16">Loading...</span></p>
+        <button id="btn16">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>14</h2>
+        <p>Estado: <span id="status17">Loading...</span></p>
+        <button id="btn17">RESETEAR</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>15</h2>
+        <p>Estado: <span id="status18">Loading...</span></p>
+        <button id="btn18">RESETEAR</button>
+      </div>
+
     </div>
 
     <button id="allOffBtn">All OFF</button>
-    <button id="logoutBtn">LOGOUT</button>
+    <button id="logoutBtn">RESETEAR</button>
   </div>
 
   <footer>
@@ -181,20 +286,21 @@
 
   <script>
     // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBAYtKCXB0w1Hx-TLCJgh1e8YrQEK2PvfE",
-      authDomain: "exomad-bc018.firebaseapp.com",
-      databaseURL: "https://exomad-bc018-default-rtdb.firebaseio.com",
-      projectId: "exomad-bc018",
-      storageBucket: "exomad-bc018.firebasestorage.app",
-      messagingSenderId: "318748880626",
-      appId: "1:318748880626:web:fb653b854f9b83aaa76a6b",
-      measurementId: "G-WBYW4NSV2D"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBAYtKCXB0w1Hx-TLCJgh1e8YrQEK2PvfE",
+  authDomain: "exomad-bc018.firebaseapp.com",
+  databaseURL: "https://exomad-bc018-default-rtdb.firebaseio.com",
+  projectId: "exomad-bc018",
+  storageBucket: "exomad-bc018.firebasestorage.app",
+  messagingSenderId: "318748880626",
+  appId: "1:318748880626:web:fb653b854f9b83aaa76a6b",
+  measurementId: "G-WBYW4NSV2D"
+};
+
 
     firebase.initializeApp(firebaseConfig);
 
-    // Predefined login credentials
+    // Predefined login credentials (can be replaced with your logic)
     const allowedEmail = "administracion@exomad.com";
     const allowedPassword = "admin123";
 
@@ -211,8 +317,8 @@
         return;
       }
 
-      // Check predefined credentials
-      if (email === allowedEmail && password === allowedPassword) {
+      // Check hardcoded credentials first
+      if(email === allowedEmail && password === allowedPassword){
         // Sign in with Firebase
         firebase.auth().signInWithEmailAndPassword(email, password)
           .then(userCredential => {
@@ -237,39 +343,36 @@
         { id: 2, path: "relay2" },
         { id: 3, path: "relay3" },
         { id: 4, path: "relay4" },
-        { id: 5, path: "relay5" },
+	    	{ id: 5, path: "relay5" },
         { id: 6, path: "relay6" },
         { id: 7, path: "relay7" },
         { id: 8, path: "relay8" },
-        { id: 9, path: "relay9" },
+	    	{ id: 9, path: "relay9" },
         { id: 10, path: "relay10" },
         { id: 11, path: "relay11" },
         { id: 12, path: "relay12" },
-        { id: 13, path: "relay13" },
+		    { id: 13, path: "relay13" },
         { id: 14, path: "relay14" },
         { id: 15, path: "relay15" },
         { id: 16, path: "relay16" },
-        { id: 17, path: "relay17" },
+	    	{ id: 17, path: "relay17" },
         { id: 18, path: "relay18" },
       ];
 
       relays.forEach(relay => {
         const statusText = document.getElementById(`status${relay.id}`);
-        const toggleButton = document.getElementById(`btn${relay.id}`);
+        //const toggleButton = document.getElementById(`btn${relay.id}`);
         const relayRef = db.ref("/" + relay.path);
 
         relayRef.on("value", (snapshot) => {
           const state = snapshot.val();
-          statusText.innerText = state ? "🔥 HUMO DETECTADO" : "NO HUMO";
-          toggleButton.style.backgroundColor = state ? "green" : "blue";
+          statusText.innerText = state ? "🔥HUMO DETECTADO" : "NO HUMO";
+         // toggleButton.style.backgroundColor = state ? "green" : "blue";
         });
 
         toggleButton.onclick = () => {
           relayRef.get().then(snap => {
             relayRef.set(!snap.val());
-
-            // Encender/Apagar LED
-            db.ref("/ledControl").set(!snap.val()); // Controla el LED
           });
         };
       });
@@ -295,4 +398,5 @@
     };
   </script>
 </body>
+
 </html>
