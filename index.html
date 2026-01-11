@@ -360,7 +360,7 @@ const firebaseConfig = {
       ];
 
       relays.forEach(relay => {
-        const statusText = document.getElementById(`status${relay.id}`);
+        const statusText = document.getElementById(`status`);
         const toggleButton = document.getElementById(`btn${relay.id}`);
         const relayRef = db.ref("/" + relay.path);
 
@@ -400,4 +400,3 @@ const firebaseConfig = {
 </body>
 
 </html>
-
