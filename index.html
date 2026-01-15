@@ -1,402 +1,92 @@
+<!-- Complete Project Details at: https://RandomNerdTutorials.com/ -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Monitoreo Sensor de Humo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0 10px 40px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      justify-content: space-between;
-    }
-    h1 {
-      margin-top: 30px;
-      font-size: 1.8rem;
-    }
-    .relay-card {
-      display: inline-block;
-      background-color: white;
-      padding: 20px;
-      margin: 15px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 220px;
-      vertical-align: top;
-    }
-    .relay-card h2 {
-      margin-bottom: 10px;
-      font-size: 1.3rem;
-    }
-    .relay-card p {
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    .relay-card button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      background-color: blue;
-      cursor: pointer;
-      font-size: 16px;
-	  width: 90%;
-      transition: opacity 0.3s ease;
-    }
-    .relay-card button:hover {
-      opacity: 0.8;
-    }
-    #allOffBtn, #logoutBtn {
-      max-width: 300px;
-      width: 90%;
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 15px auto;
-      display: block;
-      color: white;
-      transition: opacity 0.3s ease;
-    }
-    #allOffBtn {
-      background-color: #d32f2f;
-    }
-    #allOffBtn:hover {
-      opacity: 0.8;
-    }
-    #logoutBtn {
-      background-color: #555;
-    }
-    #logoutBtn:hover {
-      opacity: 0.8;
-    }
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ESP IoT Firebase App</title>
 
-    /* Responsive layout */
-    #dashboard {
-      display: none;
-    }
-    #loginForm {
-      max-width: 400px;
-      margin: 80px auto 20px;
-      background: white;
-      padding: 30px 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    #loginForm input {
-      width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0 20px;
-      font-size: 1rem;
-      border: 1.5px solid #ccc;
-      border-radius: 10px;
-      box-sizing: border-box;
-      outline-offset: 2px;
-      transition: border-color 0.3s ease;
-    }
-    #loginForm input:focus {
-      border-color: #1e88e5;
-    }
-    #loginForm button {
-      width: 100%;
-      background-color: #1e88e5;
-      color: white;
-      padding: 12px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #loginForm button:hover {
-      background-color: #1565c0;
-    }
-    #dashboard .relay-container {
-      max-width: 960px;
-      margin: 20px auto 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    /* Smaller devices */
-    @media (max-width: 700px) {
-      .relay-card {
-        width: 90%;
-        margin: 10px auto;
-        display: block;
-      }
-      body {
-        padding: 0 10px 60px;
-      }
-    }
-    footer {
-      font-size: 0.9rem;
-      color: #666;
-      padding: 10px 0;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
+    <!-- update the version number as needed -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
 
- 
-  <!-- Login form -->
-  <div id="loginForm">
-       <h1>SENSOR DE HUMO</h1>
-     <h1>LOGIN</h1>
-    <input type="email" id="email" placeholder="Enter Email" required />
-    <input type="password" id="password" placeholder="Enter Password" required />
-    <button id="loginBtn">Login</button>
-  </div>
+    <!-- include only the Firebase features as you need -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
 
-  <!-- Dashboard -->
-   
-  <div id="dashboard">
-    <h1>PANEL DE CONTROL - SENSOR DE HUMO</h1>
-    <div class="relay-container">
-      <div class="relay-card">
-        <h2>AREA - AFILADORA</h2>
-        <p>Estado: <span id="status1">Loading...</span></p>
-        <button id="btn1">RESETEAR</button>
-      </div>
-
-  <div class="relay-card">
-        <h2>AREA - ADMINISTRACION</h2>
-        <p>Estado: <span id="status2">Loading...</span></p>
-        <button id="btn2">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - SALA DE REUNIONES</h2>
-        <p>Estado: <span id="status3">Loading...</span></p>
-        <button id="btn3">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - ADMINISTRACION 2</h2>
-        <p>Estado: <span id="status4">Loading...</span></p>
-        <button id="btn4">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - DESORILLADORA</h2>
-        <p>Estado: <span id="status5">Loading...</span></p>
-        <button id="btn5">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - CARPINTERIA</h2>
-        <p>Status: <span id="status6">Loading...</span></p>
-        <button id="btn6">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - GUITARRA 1</h2>
-        <p>Status: <span id="status7">Loading...</span></p>
-        <button id="btn7">RESETEAR</button>
-      </div>
-
-       <div class="relay-card">
-        <h2>AREA - GUITARRA 2</h2>
-        <p>Estado: <span id="status8">Loading...</span></p>
-        <button id="btn8">RESETEAR</button>
-      </div>
-
-       <div class="relay-card">
-        <h2>AREA - GUITARRA 3 </h2>
-        <p>Estado: <span id="status9">Loading...</span></p>
-        <button id="btn9">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>AREA - GUITARRA 4</h2>
-        <p>Estado: <span id="status10">Loading...</span></p>
-        <button id="btn10">RESETEAR</button>
-      </div>
-      <div class="relay-card">
-
-        <h2>AREA - GUITARRA 5</h2>
-        <p>Estado: <span id="status11">Loading...</span></p>
-        <button id="btn11">RESETEAR</button>
-      </div>
-      
-      <div class="relay-card">
-        <h2>AREA - CARPINTERIA</h2>
-        <p>Estado: <span id="status12">Loading...</span></p>
-        <button id="btn12">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>10</h2>
-        <p>Estado: <span id="status13">Loading...</span></p>
-        <button id="btn13">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>11</h2>
-        <p>Estado: <span id="status14">Loading...</span></p>
-        <button id="btn14">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>12</h2>
-        <p>Estado: <span id="status15">Loading...</span></p>
-        <button id="btn15">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>13</h2>
-        <p>Estado: <span id="status16">Loading...</span></p>
-        <button id="btn16">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>14</h2>
-        <p>Estado: <span id="status17">Loading...</span></p>
-        <button id="btn17">RESETEAR</button>
-      </div>
-
-      <div class="relay-card">
-        <h2>15</h2>
-        <p>Estado: <span id="status18">Loading...</span></p>
-        <button id="btn18">RESETEAR</button>
-      </div>
-
-    </div>
-
-    <button id="allOffBtn">All OFF</button>
-    <button id="logoutBtn">RESETEAR</button>
-  </div>
-
-  <footer>
-    Created by Tech StudyCell
-  </footer>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-
-  <script>
-    // Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBAYtKCXB0w1Hx-TLCJgh1e8YrQEK2PvfE",
-  authDomain: "exomad-bc018.firebaseapp.com",
-  databaseURL: "https://exomad-bc018-default-rtdb.firebaseio.com",
-  projectId: "exomad-bc018",
-  storageBucket: "exomad-bc018.firebasestorage.app",
-  messagingSenderId: "318748880626",
-  appId: "1:318748880626:web:fb653b854f9b83aaa76a6b",
-  measurementId: "G-WBYW4NSV2D"
+    <script>
+     // REPLACE WITH YOUR web app's Firebase configuration
+    const firebaseConfig = {
+  apiKey: "AIzaSyCemgIz1GSlLHhLsdGJ7flUOKubDviMhdc",
+  authDomain: "exomad-sensor-de-humo.firebaseapp.com",
+  projectId: "exomad-sensor-de-humo",
+  storageBucket: "exomad-sensor-de-humo.firebasestorage.app",
+  messagingSenderId: "268089805795",
+  appId: "1:268089805795:web:77c68d3c711f65e0f4eed6",
+  measurementId: "G-TDPGTTBJ0P"
 };
 
+      // Initialize firebase
+      firebase.initializeApp(firebaseConfig);
 
-    firebase.initializeApp(firebaseConfig);
-
-    // Predefined login credentials (can be replaced with your logic)
-    const allowedEmail = "administracion@exomad.com";
-    const allowedPassword = "admin123";
-
-    const loginForm = document.getElementById("loginForm");
-    const dashboard = document.getElementById("dashboard");
-    const loginBtn = document.getElementById("loginBtn");
-
-    loginBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (!email || !password) {
-        alert("Please enter email and password.");
-        return;
-      }
-
-      // Check hardcoded credentials first
-      if(email === allowedEmail && password === allowedPassword){
-        // Sign in with Firebase
-        firebase.auth().signInWithEmailAndPassword(email, password)
-          .then(userCredential => {
-            console.log("Signed in as", userCredential.user.email);
-            loginForm.style.display = "none";
-            dashboard.style.display = "block";
-            startRelayControl();
-          })
-          .catch(error => {
-            alert("Firebase login failed: " + error.message);
-          });
-      } else {
-        alert("Invalid email or password.");
-      }
-    });
-
-    function startRelayControl() {
+      // Make auth and database references
+      const auth = firebase.auth();
       const db = firebase.database();
 
-      const relays = [
-        { id: 1, path: "relay1" },
-        { id: 2, path: "relay2" },
-        { id: 3, path: "relay3" },
-        { id: 4, path: "relay4" },
-	    	{ id: 5, path: "relay5" },
-        { id: 6, path: "relay6" },
-        { id: 7, path: "relay7" },
-        { id: 8, path: "relay8" },
-	    	{ id: 9, path: "relay9" },
-        { id: 10, path: "relay10" },
-        { id: 11, path: "relay11" },
-        { id: 12, path: "relay12" },
-		    { id: 13, path: "relay13" },
-        { id: 14, path: "relay14" },
-        { id: 15, path: "relay15" },
-        { id: 16, path: "relay16" },
-	    	{ id: 17, path: "relay17" },
-        { id: 18, path: "relay18" },
-      ];
+    </script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
-      relays.forEach(relay => {
-        const statusText = document.getElementById(`status${relay.id}`);
-        const toggleButton = document.getElementById(`btn${relay.id}`);
-        const relayRef = db.ref("/" + relay.path);
+<body>
+  <!--TOP BAR-->
+  <div class="topnav">
+    <h1>Read Sensor App <i class="fas fa-clipboard-list"></i></h1>
+  </div>
 
-        relayRef.on("value", (snapshot) => {
-          const state = snapshot.val();
-          statusText.innerText = state ? "🔥HUMO DETECTADO" : "NO HUMO";
-          toggleButton.style.backgroundColor = state ? "green" : "blue";
-        });
+  <!--AUTHENTICATION BAR (USER DETAILS/LOGOUT BUTTON)-->
+  <div id="authentication-bar" style="display: none;">
+    <p><span id="authentication-status">Usuario Logged</span>
+       <span id="user-details">USEREMAIL</span>
+       <a href="/" id="logout-link">(logout)</a>
+    </p>
+  </div>
 
-        toggleButton.onclick = () => {
-          relayRef.get().then(snap => {
-            relayRef.set(!snap.val());
-          });
-        };
-      });
+  <!--LOGIN FORM-->
+  <form id="login-form" style="display: none;">
+    <div class="form-elements-container">
+      <label for="input-email"><b>Email</b></label>
+      <input type="text" placeholder="Enter Username" id="input-email" required>
 
-      document.getElementById("allOffBtn").onclick = () => {
-        relays.forEach(relay => {
-          db.ref("/" + relay.path).set(false);
-        });
-      };
-    }
+      <label for="input-password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" id="input-password" required>
 
-    document.getElementById("logoutBtn").onclick = () => {
-      firebase.auth().signOut()
-        .then(() => {
-          dashboard.style.display = "none";
-          loginForm.style.display = "block";
-          document.getElementById("email").value = "";
-          document.getElementById("password").value = "";
-        })
-        .catch(error => {
-          alert("Logout failed: " + error.message);
-        });
-    };
-  </script>
-</body>
+      <button type="submit" id="login-button">Login</button>
+      <p id="error-message" style="color:red;"></p>
+    </div>
+  </form>
 
+  <!--CONTENT (SENSOR READINGS)-->
+  <div class="content-sign-in" id="content-sign-in" style="display: none;">
+    <div class="cards">
+      <!--TEMPERATURE-->
+      <div class="card">
+        <p><i class="fas fa-thermometer-half" style="color:#e72b3b;"></i> TEMPERATURA</p>
+        <p><span class="reading"><span id="temp"></span> &deg;C</span></p>
+      </div>
+      <!--HUMIDITY-->
+      <div class="card">
+        <p><i class="fas fa-tint" style="color:#00add6;"></i> HUMEDAD</p>
+        <p><span class="reading"><span id="hum"></span> &percnt;</span></p>
+      </div>
+      <!--PRESSURE-->
+      <div class="card">
+        <p><i class="fas fa-rocket" style="color:#e47637;"></i> PRESIÓN</p>
+        <p><span class="reading"><span id="pres"></span> hPa</span></p>
+      </div>
+    </div>
+  </div>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/index.js"></script>
+  </body>
 </html>
