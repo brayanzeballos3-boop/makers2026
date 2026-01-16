@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ESP IoT Firebase DASH</title>
+
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCemgIz1GSlLHhLsdGJ7flUOKubDviMhdc",
+        authDomain: "exomad-sensor-de-humo.firebaseapp.com",
+        databaseURL: "https://exomad-sensor-de-humo-default-rtdb.firebaseio.com",
+        projectId: "exomad-sensor-de-humo",
+        storageBucket: "exomad-sensor-de-humo.firebasestorage.app",
+        messagingSenderId: "268089805795",
+        appId: "1:268089805795:web:77c68d3c711f65e0f4eed6",
+        measurementId: "G-TDPGTTBJ0P"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.database();
+    </script>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+
+  <body>
+    <!--TOP BAR-->
+    <div class="topnav">
+      <h1>PANEL DE CONTROL - EXOMAD <i class="fas fa-clipboard-list"></i></h1>
+    </div>
+
+    <!--AUTHENTICATION BAR (USER DETAILS/LOGOUT BUTTON)-->
+    <div id="authentication-bar" style="display: none;">
+      <p><span id="authentication-status">Usuario Logged</span>
+         <span id="user-details">USEREMAIL</span>
+         <a href="/" id="logout-link">(logout)</a>
+      </p>
+    </div>
+
+    <!--LOGIN FORM-->
+    <form id="login-form" style="display: none;">
+      <div class="form-elements-container">
+        <label for="input-email"><b>Correo electronico</b></label>
+        <input type="text" placeholder="Enter Username" id="input-email" required>
+
+        <label for="input-password"><b>Contraseña</b></label>
+        <input type="password" placeholder="Enter Password" id="input-password" required>
+
+        <button type="submit" id="login-button">INGRESAR</button>
+        <p id="error-message" style="color:red;"></p>
+      </div>
+    </form>
+
+    <!--CONTENT (SENSOR READINGS)-->
+    <div class="content-sign-in" id="content-sign-in">
+      <div class="cards">
+
+        <!--LED-->
+        <div class="card card-switch">
+        <h3>SALA DE REUNIÓN</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed(this);" id="led"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor">Desconocido</span></div>
+      </div>    
+
+         <div class="card card-switch">
+        <h3>ADMINISTRACIÓN</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed1(this);" id="led1"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor1">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+        <h3>ARCHIVO</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed2(this);" id="led2"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor2">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+        <h3>AFILADORA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed3(this);" id="led3"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor3">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>DESORILLADORA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed4(this);" id="led4"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor4">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>CARPINTERIA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed5(this);" id="led5"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor5">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>CNC - GUITARRA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed6(this);" id="led6"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor6">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>OFICINA - GUITARRA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed7(this);" id="led7"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor7">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>TALLER 1</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed8(this);" id="led8"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor8">Desconocido</span></div>
+      </div>   
+      
+        <div class="card card-switch">
+           <h3>TALLER 2</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed9(this);" id="led9"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor9">Desconocido</span></div>
+      </div>    
+
+         <div class="card card-switch">
+           <h3>TALLER 3</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed10(this);" id="led10"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span span class="estado" id="ButtonSensor10">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>PINTURA - GUITARRA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed11(this);" id="led11"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor11">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>ALMACEN - GUITARRA</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed12(this);" id="led12"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor12">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>CARPINTERIA 2</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed13(this);" id="led13"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor13">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>GALPON BASE</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed14(this);" id="led14"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor14">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>SALA DE CONTROL</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed15(this);" id="led15"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor15">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>DEKING</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed16(this);" id="led16"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor16">Desconocido</span></div>
+      </div>   
+
+         <div class="card card-switch">
+           <h3>NO DEFINIDO</h3>
+        <h4> 🔄RESETEAR</h4>
+        <label class="switch">
+        <input type="checkbox" onchange="toggleLed17(this);" id="led17"><span class="slider">
+        </span>
+      </label>
+        <div id="sensor-status">ESTADO SENSOR DE HUMO : <span class="estado" id="ButtonSensor17">Desconocido</span></div>
+      </div>   
+      
+      
+
+      </div>
+
+    
+      </div>
+    </div>
+
+    <script src="scripts/index.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/charts-definitions.js"></script>
+  </body>
+</html>
