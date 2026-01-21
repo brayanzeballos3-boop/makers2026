@@ -236,8 +236,8 @@ function toggleLed()  { firebase.database().ref(dbPathLed).set(ledElement.checke
 function toggleLed1() { firebase.database().ref(dbPathLed1).set(ledElement1.checked ? "OFF" : "ON"); }
 function toggleLed2() { firebase.database().ref(dbPathLed2).set(ledElement2.checked ? "ON" : "OFF"); }
 function toggleLed3() { firebase.database().ref(dbPathLed3).set(ledElement3.checked ? "ON" : "OFF"); }
-function toggleLed4() { firebase.database().ref(dbPathLed4).set(ledElement4.checked ? "ON" : "OFF"); }
-function toggleLed5() { firebase.database().ref(dbPathLed5).set(ledElement5.checked ? "ON" : "OFF"); }
+function toggleLed4() { firebase.database().ref(dbPathLed4).set(ledElement4.checked ? "OFF" : "ON"); }
+function toggleLed5() { firebase.database().ref(dbPathLed5).set(ledElement5.checked ? "OFF" : "ON"); }
 function toggleLed6() { firebase.database().ref(dbPathLed6).set(ledElement6.checked ? "ON" : "OFF"); }
 function toggleLed7() { firebase.database().ref(dbPathLed7).set(ledElement7.checked ? "ON" : "OFF"); }
 function toggleLed8() { firebase.database().ref(dbPathLed8).set(ledElement8.checked ? "ON" : "OFF"); }
