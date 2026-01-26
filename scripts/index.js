@@ -28,6 +28,9 @@ const ledElement15 = document.getElementById("led15");
 const ledElement16 = document.getElementById("led16");
 const ledElement17 = document.getElementById("led17");
 
+// ===== NUEVO LED20 =====
+const ledElement20 = document.getElementById("led20");
+
 // =======================
 // Firebase paths
 // =======================
@@ -49,6 +52,9 @@ let dbPathLed14;
 let dbPathLed15;
 let dbPathLed16;
 let dbPathLed17;
+
+// ===== PATH LED20 =====
+let dbPathLed20;
 
 let dbPathButton;
 let dbPathButton1;
@@ -104,6 +110,9 @@ const setupUI = (user) => {
     dbPathLed16 = `UsersData/${uid}/led16`;
     dbPathLed17 = `UsersData/${uid}/led17`;
 
+    // ===== PATH LED20 =====
+    dbPathLed20 = `UsersData/${uid}/led20`;
+
     dbPathButton  = `UsersData/${uid}/button`;
     dbPathButton1 = `UsersData/${uid}/button1`;
     dbPathButton2 = `UsersData/${uid}/button2`;
@@ -145,81 +154,57 @@ const setupUI = (user) => {
     firebase.database().ref(dbPathLed16).on('value', s => ledElement16.checked = s.val() === "ON");
     firebase.database().ref(dbPathLed17).on('value', s => ledElement17.checked = s.val() === "ON");
 
+    // ===== LED20 LISTENER =====
+    firebase.database().ref(dbPathLed20).on('value', s => {
+      if (ledElement20) {
+        ledElement20.checked = s.val() === "ON";
+      }
+    });
+
     // =======================
     // BUTTON LISTENERS
     // =======================
-    firebase.database().ref(dbPathButton).on('value', s =>
-      document.getElementById("ButtonSensor").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton1).on('value', s =>
-      document.getElementById("ButtonSensor1").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton2).on('value', s =>
-      document.getElementById("ButtonSensor2").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton3).on('value', s =>
-      document.getElementById("ButtonSensor3").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton4).on('value', s =>
-      document.getElementById("ButtonSensor4").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton5).on('value', s =>
-      document.getElementById("ButtonSensor5").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton6).on('value', s =>
-      document.getElementById("ButtonSensor6").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton7).on('value', s =>
-      document.getElementById("ButtonSensor7").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton8).on('value', s =>
-      document.getElementById("ButtonSensor8").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton9).on('value', s =>
-      document.getElementById("ButtonSensor9").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton10).on('value', s =>
-      document.getElementById("ButtonSensor10").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton11).on('value', s =>
-      document.getElementById("ButtonSensor11").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton12).on('value', s =>
-      document.getElementById("ButtonSensor12").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton13).on('value', s =>
-      document.getElementById("ButtonSensor13").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton14).on('value', s =>
-      document.getElementById("ButtonSensor14").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton15).on('value', s =>
-      document.getElementById("ButtonSensor15").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton16).on('value', s =>
-      document.getElementById("ButtonSensor16").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
-    firebase.database().ref(dbPathButton17).on('value', s =>
-      document.getElementById("ButtonSensor17").innerText =
-        s.val() === "ON" ? "Detectó humo 🔥" : "No detectó humo"
-    );
+    const smokeStates = Array(18).fill(false);
+
+    function updateSirena() {
+      const sirenaON = smokeStates.includes(true);
+      if (ledElement20) {
+        // Si el usuario apagó manualmente, no apagamos automáticamente
+        if (!ledElement20.checked) {
+          firebase.database().ref(dbPathLed20).set(sirenaON ? "ON" : "OFF");
+        }
+      }
+    }
+
+    const buttons = [
+      {db: dbPathButton, id: "ButtonSensor"},
+      {db: dbPathButton1, id: "ButtonSensor1"},
+      {db: dbPathButton2, id: "ButtonSensor2"},
+      {db: dbPathButton3, id: "ButtonSensor3"},
+      {db: dbPathButton4, id: "ButtonSensor4"},
+      {db: dbPathButton5, id: "ButtonSensor5"},
+      {db: dbPathButton6, id: "ButtonSensor6"},
+      {db: dbPathButton7, id: "ButtonSensor7"},
+      {db: dbPathButton8, id: "ButtonSensor8"},
+      {db: dbPathButton9, id: "ButtonSensor9"},
+      {db: dbPathButton10, id: "ButtonSensor10"},
+      {db: dbPathButton11, id: "ButtonSensor11"},
+      {db: dbPathButton12, id: "ButtonSensor12"},
+      {db: dbPathButton13, id: "ButtonSensor13"},
+      {db: dbPathButton14, id: "ButtonSensor14"},
+      {db: dbPathButton15, id: "ButtonSensor15"},
+      {db: dbPathButton16, id: "ButtonSensor16"},
+      {db: dbPathButton17, id: "ButtonSensor17"}
+    ];
+
+    buttons.forEach((btn, i) => {
+      firebase.database().ref(btn.db).on('value', s => {
+        const detected = s.val() === "ON";
+        smokeStates[i] = detected;
+        document.getElementById(btn.id).innerText = detected ? "Detectó humo 🔥" : "No detectó humo";
+        updateSirena();
+      });
+    });
 
   } else {
     loginElement.style.display = 'block';
@@ -233,11 +218,11 @@ const setupUI = (user) => {
 // TOGGLE LEDS
 // =======================
 function toggleLed()  { firebase.database().ref(dbPathLed).set(ledElement.checked ? "ON" : "OFF"); }
-function toggleLed1() { firebase.database().ref(dbPathLed1).set(ledElement1.checked ? "OFF" : "ON"); }
+function toggleLed1() { firebase.database().ref(dbPathLed1).set(ledElement1.checked ? "ON" : "OFF"); }
 function toggleLed2() { firebase.database().ref(dbPathLed2).set(ledElement2.checked ? "ON" : "OFF"); }
 function toggleLed3() { firebase.database().ref(dbPathLed3).set(ledElement3.checked ? "ON" : "OFF"); }
-function toggleLed4() { firebase.database().ref(dbPathLed4).set(ledElement4.checked ? "OFF" : "ON"); }
-function toggleLed5() { firebase.database().ref(dbPathLed5).set(ledElement5.checked ? "OFF" : "ON"); }
+function toggleLed4() { firebase.database().ref(dbPathLed4).set(ledElement4.checked ? "ON" : "OFF"); }
+function toggleLed5() { firebase.database().ref(dbPathLed5).set(ledElement5.checked ? "ON" : "OFF"); }
 function toggleLed6() { firebase.database().ref(dbPathLed6).set(ledElement6.checked ? "ON" : "OFF"); }
 function toggleLed7() { firebase.database().ref(dbPathLed7).set(ledElement7.checked ? "ON" : "OFF"); }
 function toggleLed8() { firebase.database().ref(dbPathLed8).set(ledElement8.checked ? "ON" : "OFF"); }
@@ -250,6 +235,13 @@ function toggleLed14(){ firebase.database().ref(dbPathLed14).set(ledElement14.ch
 function toggleLed15(){ firebase.database().ref(dbPathLed15).set(ledElement15.checked ? "ON" : "OFF"); }
 function toggleLed16(){ firebase.database().ref(dbPathLed16).set(ledElement16.checked ? "ON" : "OFF"); }
 function toggleLed17(){ firebase.database().ref(dbPathLed17).set(ledElement17.checked ? "ON" : "OFF"); }
+
+// =======================
+// TOGGLE LED20 MANUAL
+// =======================
+function toggleLed20() {
+  firebase.database().ref(dbPathLed20).set(ledElement20.checked ? "ON" : "OFF");
+}
 
 // =======================
 // SEND BUTTON STATES (ESP)
