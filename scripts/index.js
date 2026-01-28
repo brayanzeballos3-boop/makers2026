@@ -218,7 +218,7 @@ const setupUI = (user) => {
 // TOGGLE LEDS
 // =======================
 function toggleLed()  { firebase.database().ref(dbPathLed).set(ledElement.checked ? "OFF" : "ON"); }
-function toggleLed1() { firebase.database().ref(dbPathLed1).set(ledElement1.checked ? "ON" : "OFF"); }
+function toggleLed1() { firebase.database().ref(dbPathLed1).set(ledElement1.checked ? "OFF" : "ON"); }
 function toggleLed2() { firebase.database().ref(dbPathLed2).set(ledElement2.checked ? "ON" : "OFF"); }
 function toggleLed3() { firebase.database().ref(dbPathLed3).set(ledElement3.checked ? "ON" : "OFF"); }
 function toggleLed4() { firebase.database().ref(dbPathLed4).set(ledElement4.checked ? "ON" : "OFF"); }
